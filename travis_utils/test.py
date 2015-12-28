@@ -86,21 +86,33 @@ class TestEncryptCLI(unittest.TestCase):
         @click.option('--project', '-p')
         @click.option('--envs', '-e', multiple=True)
         def travis_encrypt_cli(account, project, envs):
-            click.echo(account)
-            click.echo(project)
-            click.echo(envs)
-
-            public_key = travis_encrypt.get_public_key(account, project)
-            cipher = travis_encrypt.get_cipher(public_key)
-
-            for env in envs:
-                print(travis_encrypt.encrypt(cipher, env))
+            travis_encrypt.print_encrypted_env(account, project, envs)
 
         runner = CliRunner()
         args = [
             '--account', 'hopsmdev',
             '--project', 'data_fetcher',
             '--envs', 'TEST=PASSWORD'
+        ]
+        result = runner.invoke(travis_encrypt_cli, args)
+        self.assertEqual(result.exit_code, 0)
+        print(result.output)
+
+    def test_travis_encrypt_multiple_envs(self):
+        @click.command()
+        @click.option('--account', '-a')
+        @click.option('--project', '-p')
+        @click.option('--envs', '-e', multiple=True)
+        def travis_encrypt_cli(account, project, envs):
+            travis_encrypt.print_encrypted_env(account, project, envs)
+
+        runner = CliRunner()
+        args = [
+            '--account', 'hopsmdev',
+            '--project', 'data_fetcher',
+            '-e', 'TEST=PASSWORD',
+            '-e', 'TEST2=PASSWORD',
+            '-e', 'TEST3=PASSWORD'
         ]
         result = runner.invoke(travis_encrypt_cli, args)
         self.assertEqual(result.exit_code, 0)

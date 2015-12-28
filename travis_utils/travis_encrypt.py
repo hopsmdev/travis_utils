@@ -19,7 +19,14 @@ def get_cipher(public_key):
 
 
 def encrypt(cipher, env):
-    return base64.b64encode(cipher.encrypt(str.encode(env)))
+    return base64.b64encode(cipher.encrypt(str.encode(env))).decode('utf-8')
+
+
+def print_encrypted_env(account, project, envs):
+    public_key = get_public_key(account, project)
+    cipher = get_cipher(public_key)
+    for env in envs:
+        print(env, "==>", encrypt(cipher, env))
 
 
 @click.command()
@@ -27,15 +34,7 @@ def encrypt(cipher, env):
 @click.option('--project', '-p')
 @click.option('--envs', '-e', multiple=True)
 def travis_encrypt_cli(account, project, envs):
-    click.echo(account)
-    click.echo(project)
-    click.echo(envs)
-
-    public_key = get_public_key(account, project)
-    cipher = get_cipher(public_key)
-
-    for env in envs:
-        print(encrypt(cipher, env))
+    print_encrypted_env(account, project, envs)
 
 
 if __name__ == "__main__":
