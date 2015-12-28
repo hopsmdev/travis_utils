@@ -1,6 +1,6 @@
 import requests
 import base64
-import argparse
+import click
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
 
@@ -22,13 +22,21 @@ def encrypt(cipher, env):
     return base64.b64encode(cipher.encrypt(str.encode(env)))
 
 
-if __name__ == "__main__":
-    account = "hopsmdev"
-    project = "data_fetcher"
-    env = "TEST=TEST"
+@click.command()
+@click.option('--account', '-a')
+@click.option('--project', '-p')
+@click.option('--envs', '-e', multiple=True)
+def travis_encrypt_cli(account, project, envs):
+    click.echo(account)
+    click.echo(project)
+    click.echo(envs)
+
     public_key = get_public_key(account, project)
-    print(public_key)
     cipher = get_cipher(public_key)
-    print(cipher)
-    encrypted = encrypt(cipher, env)
-    print(encrypted)
+
+    for env in envs:
+        print(encrypt(cipher, env))
+
+
+if __name__ == "__main__":
+    travis_encrypt_cli()
