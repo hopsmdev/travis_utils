@@ -34,6 +34,12 @@ def print_encrypted_env(account, project, envs):
 @click.option('--project', '-p')
 @click.option('--envs', '-e', multiple=True)
 def travis_encrypt_cli(account, project, envs):
+    """
+    :param account: github account name
+    :param project: github project
+    :param envs: e.g. MY_VAR=VALIE
+    :return:
+    """
     print_encrypted_env(account, project, envs)
 
 
