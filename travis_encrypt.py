@@ -1,10 +1,8 @@
 import requests
 import base64
 import argparse
-
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
-
 
 PUBLIC_KEY_URL = "https://api.travis-ci.org/repos/{account}/{project}/key"
 

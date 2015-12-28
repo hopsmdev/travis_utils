@@ -1,8 +1,6 @@
 import unittest
 import travis_encrypt
-
 from base64 import b64decode
-
 import Crypto
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
@@ -54,9 +52,8 @@ def decrypt(encrypted):
     sentinel = ""
     return cipher.decrypt(b64decode(encrypted), sentinel)
 
+
 class TestEncrypt(unittest.TestCase):
-
-
     def test_get_public_key(self):
         account = "hopsmdev"
         project = "data_fetcher"
@@ -76,7 +73,6 @@ class TestEncrypt(unittest.TestCase):
         decrypted = (decrypt(encrypted)).decode('utf-8')
 
         self.assertEqual(env, decrypted)
-
 
 
 if __name__ == "__main__":
