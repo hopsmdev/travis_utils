@@ -104,6 +104,7 @@ class TestEncryptCLI(unittest.TestCase):
         @click.option('--project', '-p')
         @click.option('--envs', '-e', multiple=True)
         def travis_encrypt_cli(account, project, envs):
+            click.echo(envs)
             travis_encrypt.print_encrypted_env(account, project, envs)
 
         runner = CliRunner()
@@ -113,6 +114,26 @@ class TestEncryptCLI(unittest.TestCase):
             '-e', 'TEST=PASSWORD',
             '-e', 'TEST2=PASSWORD',
             '-e', 'TEST3=PASSWORD'
+        ]
+        result = runner.invoke(travis_encrypt_cli, args)
+        self.assertEqual(result.exit_code, 0)
+        print(result.output)
+
+    def test_travis_encrypt_verbose(self):
+        @click.command()
+        @click.option('--account', '-a')
+        @click.option('--project', '-p')
+        @click.option('--envs', '-e', multiple=True)
+        @click.option('--verbose', '-v', is_flag=True)
+        def travis_encrypt_cli(account, project, envs, verbose):
+            travis_encrypt.print_encrypted_env(account, project, envs, verbose)
+
+        runner = CliRunner()
+        args = [
+            '--account', 'hopsmdev',
+            '--project', 'data_fetcher',
+            '--envs', 'TEST=PASSWORD',
+            '--verbose'
         ]
         result = runner.invoke(travis_encrypt_cli, args)
         self.assertEqual(result.exit_code, 0)

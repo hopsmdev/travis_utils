@@ -25,22 +25,27 @@ def encrypt(cipher, env):
     return base64.b64encode(cipher.encrypt(bytes_env)).decode('utf-8')
 
 
-def print_encrypted_env(account, project, envs):
+def print_encrypted_env(account, project, envs, verbose=False):
     public_key = get_public_key(account, project)
     cipher = get_cipher(public_key)
+
     for env in envs:
-        print(env, "==>", encrypt(cipher, env))
+        print("secure: ! '{}'".format(encrypt(cipher, env)))
+        if verbose:
+            print(env, "===>", encrypt(cipher, env))
 
 
 @click.command()
 @click.option('--account', '-a')
 @click.option('--project', '-p')
 @click.option('--envs', '-e', multiple=True)
-def travis_encrypt_cli(account, project, envs):
+@click.option('--verbose', '-v', is_flag=True)
+def travis_encrypt_cli(account, project, envs, verbose=False):
     """
     :param account: github account name
     :param project: github project
     :param envs: e.g. MY_VAR=VALIE
+    :param verbose: default False, print more info
     :return:
 
     How to use from command line:
@@ -48,7 +53,7 @@ def travis_encrypt_cli(account, project, envs):
     or you can use multiple envs e.g.
     > python travis_encrypt.py -a ACCOUNT -p PROJECT -e VAR=10 -e VAR1=11
     """
-    print_encrypted_env(account, project, envs)
+    print_encrypted_env(account, project, envs, verbose)
 
 
 if __name__ == "__main__":
