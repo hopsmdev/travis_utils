@@ -1,8 +1,10 @@
-import requests
+from __future__ import unicode_literals
+
 import base64
 import click
-from Crypto.PublicKey import RSA
+import requests
 from Crypto.Cipher import PKCS1_v1_5
+from Crypto.PublicKey import RSA
 
 PUBLIC_KEY_URL = "https://api.travis-ci.org/repos/{account}/{project}/key"
 
@@ -19,7 +21,8 @@ def get_cipher(public_key):
 
 
 def encrypt(cipher, env):
-    return base64.b64encode(cipher.encrypt(str.encode(env))).decode('utf-8')
+    bytes_env = bytearray(env, 'utf-8')
+    return base64.b64encode(cipher.encrypt(bytes_env)).decode('utf-8')
 
 
 def print_encrypted_env(account, project, envs):
