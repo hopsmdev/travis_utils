@@ -42,6 +42,11 @@ def travis_encrypt_cli(account, project, envs):
     :param project: github project
     :param envs: e.g. MY_VAR=VALIE
     :return:
+
+    How to use from command line:
+    > python travis_encrypt.py -a ACCOUNT -p PROJECT -e VAR=VALUE
+    or you can use multiple envs e.g.
+    > python travis_encrypt.py -a ACCOUNT -p PROJECT -e VAR=10 -e VAR1=11
     """
     print_encrypted_env(account, project, envs)
 
